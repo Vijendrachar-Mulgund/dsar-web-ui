@@ -1,8 +1,10 @@
+import { Button } from "@/components/ui/button";
+
 function App() {
   return (
     <div>
-      <h1>My App</h1>
-      <p>My App is running!</p>
+      <h1 className="text-3xl font-bold underline">Hello world!</h1>
+      <Button variant="destructive">Destructive</Button>
     </div>
   );
 }
