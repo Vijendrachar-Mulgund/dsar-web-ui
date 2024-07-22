@@ -1,14 +1,13 @@
-import { Button } from "@/components/ui/button";
 import { Route, Routes } from "react-router-dom";
+import { Login } from "./pages/Login";
+import { Header } from "./components/modules/Header";
 
 function App() {
   return (
     <div>
-      <h1 className="text-3xl font-bold underline">Hello world!</h1>
-      <Button variant="destructive">Destructive</Button>
-
+      <Header />
       <Routes>
-        <Route path="/login" element={<h1>Hello Login</h1>} />
+        <Route path="/login" element={<Login />} />
         <Route path="/dashboard" element={<h1>Dashboard</h1>} />
       </Routes>
     </div>
