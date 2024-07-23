@@ -2,10 +2,11 @@ import { Sheet, SheetTrigger, SheetContent } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { NavigationMenu, NavigationMenuList, NavigationMenuLink } from "@/components/ui/navigation-menu";
+import { ModeToggle } from "./Theme-Toggle";
 
 export function Header() {
   return (
-    <header className="flex h-20 w-full shrink-0 items-center px-4 md:px-6">
+    <header className="flex fixed h-20 w-full shrink-0 items-center px-4 md:px-6">
       <Sheet>
         <SheetTrigger asChild>
           <Button variant="outline" size="icon" className="lg:hidden">
@@ -86,6 +87,7 @@ export function Header() {
         </NavigationMenuList>
       </NavigationMenu>
       <div className="ml-auto flex gap-2">
+        <ModeToggle />
         <Button variant="outline">Sign in</Button>
         <Button>Sign Up</Button>
       </div>
@@ -132,23 +134,3 @@ function ShirtIcon(props: any) {
     </svg>
   );
 }
-
-// function XIcon(props: any) {
-//   return (
-//     <svg
-//       {...props}
-//       xmlns="http://www.w3.org/2000/svg"
-//       width="24"
-//       height="24"
-//       viewBox="0 0 24 24"
-//       fill="none"
-//       stroke="currentColor"
-//       strokeWidth="2"
-//       strokeLinecap="round"
-//       strokeLinejoin="round"
-//     >
-//       <path d="M18 6 6 18" />
-//       <path d="m6 6 12 12" />
-//     </svg>
-//   );
-// }
