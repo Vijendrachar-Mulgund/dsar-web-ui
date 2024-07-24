@@ -1,5 +1,4 @@
-import { Route, Routes } from "react-router-dom";
-import { Login } from "./pages/Login";
+import { Outlet } from "react-router-dom";
 import { Header } from "./components/modules/Header";
 import { Footer } from "./components/modules/Footer";
 import { ThemeProvider } from "./components/theme/ThemeProvider";
@@ -14,10 +13,9 @@ function App() {
         <Header />
 
         {/* Routes */}
-        <Routes>
-          <Route path="/login" element={<Login />} />
-          <Route path="/dashboard" element={<h1>Dashboard</h1>} />
-        </Routes>
+        <div className="mt-20">
+          <Outlet />
+        </div>
 
         {/* Footer */}
         <Footer />

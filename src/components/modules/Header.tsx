@@ -8,9 +8,11 @@ import { NavigationMenu, NavigationMenuList, NavigationMenuLink } from "@/compon
 import { HeaderProps } from "@/types/HeaderProps";
 import { getInitials } from "@/utils";
 
+import Drone3DLogo from "@/assets/icons/drone-3d.svg";
+
 export function Header({ user }: HeaderProps) {
   return (
-    <header className="flex fixed h-20 w-full shrink-0  px-4 md:px-6">
+    <header className="flex fixed h-20 w-full shrink-0  px-4 md:px-6 shadow-md ">
       <div className="flex m-auto w-4/5 items-center justify-center">
         <Sheet>
           <SheetTrigger asChild>
@@ -21,7 +23,7 @@ export function Header({ user }: HeaderProps) {
           </SheetTrigger>
           <SheetContent side="left">
             <Link to="#">
-              <img src="src/assets/icons/drone-3d.svg" className="h-12 w-12" />
+              <img src={Drone3DLogo} className="h-12 w-12" />
             </Link>
             <div className="grid gap-2 py-6">
               <Link to="#" className="flex w-full items-center py-2 text-lg font-semibold">
@@ -31,7 +33,7 @@ export function Header({ user }: HeaderProps) {
           </SheetContent>
         </Sheet>
         <Link to="#" className="mr-6 hidden lg:flex">
-          <img src="src/assets/icons/drone-3d.svg" className="h-12 w-12" />
+          <img src={Drone3DLogo} className="h-12 w-12" />
         </Link>
         <NavigationMenu className="hidden lg:flex">
           <NavigationMenuList>
