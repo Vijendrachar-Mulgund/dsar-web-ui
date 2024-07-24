@@ -12,7 +12,7 @@ import Drone3DLogo from "@/assets/icons/drone-3d.svg";
 
 export function Header({ user }: HeaderProps) {
   return (
-    <header className="flex fixed h-20 w-full shrink-0  px-4 md:px-6 shadow-md ">
+    <header className="flex fixed h-20 w-full shrink-0 px-4 md:px-6">
       <div className="flex m-auto w-4/5 items-center justify-center">
         <Sheet>
           <SheetTrigger asChild>

@@ -13,7 +13,7 @@ function App() {
         <Header />
 
         {/* Routes */}
-        <div className="mt-20">
+        <div className="pt-20">
           <Outlet />
         </div>
 

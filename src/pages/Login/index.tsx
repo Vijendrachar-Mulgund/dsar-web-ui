@@ -7,7 +7,7 @@ import { Label } from "@/components/ui/label";
 
 export function Login() {
   return (
-    <div className="flex items-center justify-center h-screen">
+    <div className="flex items-center justify-center h-dvh">
       <Card className="mx-auto max-w-sm">
         <CardHeader>
           <CardTitle className="text-2xl">Login</CardTitle>
