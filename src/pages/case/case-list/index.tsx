@@ -1,15 +1,12 @@
 import { DataTable } from "@/components/ui/data-table";
-import tasks from "../../../../public/tasks.json";
 import { columns } from "@/components/ui/data-table/data/columns";
-
-// Simulate a database read for tasks.
-const theTasks = tasks;
+import data from "../../../../public/tasks.json";
 
 export function CaseList() {
-  console.log(theTasks);
+  const tasks = data;
   return (
-    <div>
-      <DataTable data={theTasks} columns={columns} />
+    <div className="w-4/5 m-auto">
+      <DataTable data={tasks} columns={columns} />
     </div>
   );
 }
