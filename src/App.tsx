@@ -5,12 +5,12 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 
 export function App() {
   return (
-    <ScrollArea>
+    <ScrollArea className="app-container">
       {/* Header Component */}
       <Header />
 
       {/* Routes */}
-      <div className="mt-20 mb-6">
+      <div className="main-content">
         <Outlet />
       </div>
 
