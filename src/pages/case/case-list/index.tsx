@@ -1,6 +1,6 @@
 import { DataTable } from "@/components/ui/data-table";
 import tasks from "../../../../public/tasks.json";
-import { columns } from "@/utils/columns";
+import { columns } from "@/components/ui/data-table/data/columns";
 
 // Simulate a database read for tasks.
 const theTasks = tasks;

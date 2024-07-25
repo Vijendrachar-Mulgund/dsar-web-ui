@@ -1,5 +1,3 @@
-"use client";
-
 import { DotsHorizontalIcon } from "@radix-ui/react-icons";
 import { Row } from "@tanstack/react-table";
 
@@ -18,8 +16,8 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
-import { labels } from "@/utils/data";
-import { taskSchema } from "@/utils/schemas";
+import { labels } from "@/components/ui/data-table/data/data";
+import { taskSchema } from "@/components/ui/data-table/data/schemas";
 
 interface DataTableRowActionsProps<TData> {
   row: Row<TData>;

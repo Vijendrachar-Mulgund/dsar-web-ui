@@ -3,8 +3,8 @@ import { ColumnDef } from "@tanstack/react-table";
 import { Badge } from "@/components/ui/badge";
 import { Checkbox } from "@/components/ui/checkbox";
 
-import { labels, priorities, statuses } from "@/utils/data";
-import { Task } from "@/utils/schemas";
+import { labels, priorities, statuses } from "@/components/ui/data-table/data/data";
+import { Task } from "@/components/ui/data-table/data/schemas";
 import { DataTableColumnHeader } from "@/components/ui/data-table/data-table-column-header";
 import { DataTableRowActions } from "@/components/ui/data-table/data-table-row-actions";
 
@@ -50,6 +50,7 @@ export const columns: ColumnDef<Task>[] = [
         </div>
       );
     },
+    enableHiding: false,
   },
   {
     accessorKey: "status",
@@ -71,6 +72,7 @@ export const columns: ColumnDef<Task>[] = [
     filterFn: (row, id, value) => {
       return value.includes(row.getValue(id));
     },
+    enableHiding: false,
   },
   {
     accessorKey: "priority",
@@ -92,6 +94,7 @@ export const columns: ColumnDef<Task>[] = [
     filterFn: (row, id, value) => {
       return value.includes(row.getValue(id));
     },
+    enableHiding: false,
   },
   {
     id: "actions",
