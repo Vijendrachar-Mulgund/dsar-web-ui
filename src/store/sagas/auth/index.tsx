@@ -1,20 +1,25 @@
 import { call, put, takeEvery } from "redux-saga/effects";
 import { loginSuccess, loginFailure, logoutSuccess } from "@/store/slices/auth";
-import { axiosInstance } from "@/store/apis/auth";
+import { axiosInstance } from "@/store/axios";
+import { LoginPayload } from "@/types/LoginPayload";
+import { User } from "@/types/dtos/auth";
 
 function* login(payload: any): Generator<any, void, any> {
   try {
-    const me: any = yield call(() => axiosInstance.post("/auth/sign-in", payload?.payload));
-    yield put(loginSuccess(me?.data?.user));
+    const body: LoginPayload = payload?.payload;
+    const data: any = yield call(() => axiosInstance.post("/auth/sign-in", body));
+    const me: User = data?.data?.user;
+    yield put(loginSuccess(me));
   } catch (error: any) {
     yield put(loginFailure(error?.message));
   }
 }
 
-function* authenticate(payload: any): Generator<any, void, any> {
+function* authenticate(): Generator<any, void, any> {
   try {
-    const me: any = yield call(() => axiosInstance.post("/auth/authenticate", payload?.payload));
-    yield put(loginSuccess(me?.data?.user));
+    const data: any = yield call(() => axiosInstance.post("/auth/authenticate"));
+    const me: User = data?.data?.user;
+    yield put(loginSuccess(me));
   } catch (error: any) {
     yield put(loginFailure(error?.message));
   }

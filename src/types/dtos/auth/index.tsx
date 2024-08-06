@@ -1,5 +1,10 @@
 import { Role } from "@/enums/Role";
 
+export type LoginPayload = {
+  email: string;
+  password: string;
+};
+
 export type User = {
   _id: string;
   email: string;
