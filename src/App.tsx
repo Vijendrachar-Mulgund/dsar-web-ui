@@ -1,19 +1,32 @@
-import { Outlet } from "react-router-dom";
+import { useEffect } from "react";
+import { Outlet, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 
 import { Header } from "@/components/modules/header";
 import { Footer } from "@/components/modules/footer";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { useEffect } from "react";
+import { User } from "@/types/dtos/auth";
+import { Role } from "@/enums/Role";
 
 export function App() {
-  const me = useSelector((state: any) => state.auth.me);
+  const me: User | null = useSelector((state: any) => state.auth.me) as User | null;
 
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   useEffect(() => {
     dispatch({ type: "auth/authenticate" });
   }, []);
+
+  useEffect(() => {
+    if (me?.role == Role.admin) {
+      navigate("/admin/dashboard");
+    }
+
+    if (me?.role == Role.teamLeader || Role.teamMember) {
+      navigate("/case/list");
+    }
+  }, [me]);
 
   return (
     <ScrollArea className="app-container">
