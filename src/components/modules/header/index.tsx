@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { useDispatch } from "react-redux";
 
 import { Button } from "@/components/ui/button";
 import { ModeToggle } from "@/components/theme/theme-toggle";
@@ -10,24 +11,42 @@ import { HeaderProps } from "@/types/HeaderProps";
 import { getInitials } from "@/utils";
 import { AdminMenu, CaseMenu } from "@/config/menu";
 
-import Drone3DLogo from "@/assets/icons/drone-3d.svg";
 import { MenuItem } from "@/types/MenuItems";
+import { Role } from "@/enums/Role";
 
-export function Header({ user }: HeaderProps) {
+import Drone3DLogo from "@/assets/icons/drone-3d.svg";
+
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+
+export function Header({ me }: HeaderProps) {
   const [menuItems, setMenuItems] = useState<Array<MenuItem> | null>(null);
+
+  const dispatch = useDispatch();
 
   // Mounted
   useEffect(() => {
-    if (user?.role === "admin") {
+    if (me?.role == Role.admin) {
       setMenuItems(AdminMenu);
-    } else if (user?.role === "teamMember" || user?.role === "teamLeader") {
+    } else if (me?.role == Role.teamLeader || me?.role == Role.teamMember) {
       setMenuItems(CaseMenu);
     }
-  }, []);
+  }, [me]);
+
+  const handleLogout = () => {
+    dispatch({ type: "auth/logout" });
+  };
 
   return (
     <header className="flex fixed h-20 w-full shrink-0 px-4 md:px-6">
       <div className="flex m-auto w-4/5 items-center justify-center">
+        {/* Mobile View */}
         <Sheet>
           <SheetTrigger asChild>
             <Button variant="outline" size="icon" className="lg:hidden">
@@ -42,7 +61,11 @@ export function Header({ user }: HeaderProps) {
             <div className="grid gap-2 py-6">
               {menuItems?.map((menuItem) => {
                 return (
-                  <Link to={menuItem?.path} className="flex w-full items-center py-2 text-lg font-semibold">
+                  <Link
+                    key={menuItem?.path}
+                    to={menuItem?.path}
+                    className="flex w-full items-center py-2 text-lg font-semibold"
+                  >
                     {menuItem.title}
                   </Link>
                 );
@@ -50,34 +73,48 @@ export function Header({ user }: HeaderProps) {
             </div>
           </SheetContent>
         </Sheet>
+
+        {/* Desktop View */}
         <Link to="#" className="mr-6 hidden lg:flex">
           <img src={Drone3DLogo} className="h-12 w-12" />
         </Link>
         <NavigationMenu className="hidden lg:flex">
           <NavigationMenuList>
-            <NavigationMenuLink asChild>
-              {menuItems?.map((menuItem) => {
-                return (
+            {menuItems?.map((menuItem) => {
+              return (
+                <NavigationMenuLink asChild>
                   <Link
                     to={menuItem?.path}
+                    key={menuItem?.path}
                     className="group inline-flex h-9 w-max items-center justify-center rounded-md bg-white px-4 py-2 text-sm font-medium transition-colors hover:bg-gray-100 hover:text-gray-900 focus:bg-gray-100 focus:text-gray-900 focus:outline-none disabled:pointer-events-none disabled:opacity-50 data-[active]:bg-gray-100/50 data-[state=open]:bg-gray-100/50 dark:bg-gray-950 dark:hover:bg-gray-800 dark:hover:text-gray-50 dark:focus:bg-gray-800 dark:focus:text-gray-50 dark:data-[active]:bg-gray-800/50 dark:data-[state=open]:bg-gray-800/50"
                   >
                     {menuItem.title}
                   </Link>
-                );
-              })}
-            </NavigationMenuLink>
+                </NavigationMenuLink>
+              );
+            })}
           </NavigationMenuList>
         </NavigationMenu>
         <div className="ml-auto flex gap-2">
           <ModeToggle />
-
-          {user?._id ? (
+          {me?._id ? (
             <div className="ml-5">
-              <Avatar>
-                <AvatarImage src="https://github.com/shadcn.png" />
-                <AvatarFallback>{getInitials(user?.firstname, user?.lastname)} </AvatarFallback>
-              </Avatar>
+              <DropdownMenu>
+                <DropdownMenuTrigger>
+                  <Avatar>
+                    <AvatarImage src="https://github.com/shadcn.png" />
+                    <AvatarFallback>{getInitials(me?.firstname, me?.lastname)} </AvatarFallback>
+                  </Avatar>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent>
+                  <DropdownMenuLabel>{`${me?.firstname} ${me?.lastname}`}</DropdownMenuLabel>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem>Profile</DropdownMenuItem>
+                  <DropdownMenuItem onClick={handleLogout} className="text-red-800 hover:bg-red-600">
+                    Logout
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
             </div>
           ) : (
             ""
