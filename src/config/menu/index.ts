@@ -11,7 +11,7 @@ export const AdminMenu = [
 
 export const CaseMenu = [
   {
-    title: "Case List",
+    title: "Case list",
     path: "/case/list",
   },
 ];

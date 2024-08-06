@@ -9,6 +9,8 @@ import { CaseDetail } from "@/pages/case/case-detail";
 import { CaseList } from "@/pages/case/case-list";
 import { Login } from "@/pages/login";
 import { NotFound } from "@/pages/not-found";
+import { AuthGuard } from "./authGuard";
+import { Role } from "@/enums/Role";
 
 export const routes = createBrowserRouter([
   {
@@ -21,15 +23,27 @@ export const routes = createBrowserRouter([
       },
       {
         path: "admin",
-        element: <Admin />,
+        element: (
+          <AuthGuard roles={Role.admin}>
+            <Admin />
+          </AuthGuard>
+        ),
         children: [
           {
             path: "create-new-account",
-            element: <CreateNewAccount />,
+            element: (
+              <AuthGuard roles={[Role.admin]}>
+                <CreateNewAccount />
+              </AuthGuard>
+            ),
           },
           {
             path: "dashboard",
-            element: <Dashboard />,
+            element: (
+              <AuthGuard roles={[Role.admin]}>
+                <Dashboard />
+              </AuthGuard>
+            ),
           },
         ],
       },
@@ -39,12 +53,20 @@ export const routes = createBrowserRouter([
         children: [
           {
             path: "list",
-            element: <CaseList />,
+            element: (
+              <AuthGuard roles={[Role.teamLeader, Role.teamMember]}>
+                <CaseList />
+              </AuthGuard>
+            ),
           },
 
           {
             path: "detail/:caseId",
-            element: <CaseDetail />,
+            element: (
+              <AuthGuard roles={[Role.teamLeader, Role.teamMember]}>
+                <CaseDetail />
+              </AuthGuard>
+            ),
           },
         ],
       },

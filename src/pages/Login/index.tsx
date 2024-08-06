@@ -1,6 +1,6 @@
-import { useState } from "react";
-import { Link } from "react-router-dom";
-import { useDispatch } from "react-redux";
+import { useEffect, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -8,11 +8,27 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { LoginPayload } from "@/types/LoginPayload";
 import { login } from "@/store/slices/auth";
+import { RootState } from "@/store/store";
+import { User } from "@/types/dtos/auth";
+import { Role } from "@/enums/Role";
 
 export function Login() {
   const [loginPayload, setLoginPayload] = useState<LoginPayload>({});
 
+  const me: User | null = useSelector((state: RootState) => state.auth.me) as User | null;
+
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (me?.role == Role.admin) {
+      navigate("/admin/dashboard");
+    }
+
+    if (me?.role == Role.teamLeader || me?.role == Role.teamMember) {
+      navigate("/case/list");
+    }
+  }, [me]);
 
   const handleLoginPayloadChange = (key: keyof LoginPayload, event: React.ChangeEvent<HTMLInputElement>) => {
     setLoginPayload((prev) => ({ ...prev, [key]: event.target.value }));
