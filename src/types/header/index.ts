@@ -1,4 +1,4 @@
-import { User } from "@/types/dtos/auth";
+import { User } from "@/types/auth";
 
 export type HeaderProps = {
   me?: User | null;

@@ -7,11 +7,11 @@ import { ModeToggle } from "@/components/theme/theme-toggle";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { Sheet, SheetTrigger, SheetContent } from "@/components/ui/sheet";
 import { NavigationMenu, NavigationMenuList, NavigationMenuLink } from "@/components/ui/navigation-menu";
-import { HeaderProps } from "@/types/dtos/header";
+import { HeaderProps } from "@/types/header";
 import { getInitials } from "@/utils";
 import { AdminMenu, CaseMenu } from "@/config/menu";
 
-import { MenuItem } from "@/types/dtos/header";
+import { MenuItem } from "@/types/header";
 import { Role } from "@/enums/Role";
 
 import Drone3DLogo from "@/assets/icons/drone-3d.svg";

@@ -1,5 +1,5 @@
 import { DataTable } from "@/components/ui/data-table";
-import { columns } from "@/components/ui/data-table/data/columns";
+import { columns } from "@/config/data/case-list";
 import data from "../../../../public/tasks.json";
 
 export function CaseList() {

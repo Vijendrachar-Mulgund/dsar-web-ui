@@ -1,8 +1,8 @@
 import { call, put, takeEvery } from "redux-saga/effects";
 import { loginSuccess, loginFailure, logoutSuccess } from "@/store/slices/auth";
 import { axiosInstance } from "@/store/axios";
-import { LoginPayload } from "@/types/dtos/auth";
-import { User } from "@/types/dtos/auth";
+import { LoginPayload } from "@/types/auth";
+import { User } from "@/types/auth";
 
 function* login(payload: any): Generator<any, void, any> {
   try {

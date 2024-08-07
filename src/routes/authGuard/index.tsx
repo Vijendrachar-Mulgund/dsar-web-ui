@@ -1,4 +1,4 @@
-import { User } from "@/types/dtos/auth";
+import { User } from "@/types/auth";
 import { useSelector } from "react-redux";
 import { Navigate } from "react-router-dom";
 
