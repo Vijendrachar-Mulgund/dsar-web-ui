@@ -6,14 +6,17 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { LoginPayload } from "@/types/LoginPayload";
+import { LoginPayload } from "@/types/dtos/auth";
 import { login } from "@/store/slices/auth";
 import { RootState } from "@/store/store";
 import { User } from "@/types/dtos/auth";
 import { Role } from "@/enums/Role";
 
 export function Login() {
-  const [loginPayload, setLoginPayload] = useState<LoginPayload>({});
+  const [loginPayload, setLoginPayload] = useState<LoginPayload>({
+    email: "",
+    password: "",
+  });
 
   const me: User | null = useSelector((state: RootState) => state.auth.me) as User | null;
 
