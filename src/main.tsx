@@ -1,4 +1,3 @@
-import React from "react";
 import ReactDOM from "react-dom/client";
 
 import { RouterProvider } from "react-router-dom";
@@ -10,11 +9,9 @@ import { store } from "@/store/store";
 import "./index.css";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
-  <React.StrictMode>
-    <Provider store={store}>
-      <ThemeProvider defaultTheme="light" storageKey="vite-ui-theme">
-        <RouterProvider router={routes} />
-      </ThemeProvider>
-    </Provider>
-  </React.StrictMode>,
+  <Provider store={store}>
+    <ThemeProvider defaultTheme="light" storageKey="vite-ui-theme">
+      <RouterProvider router={routes} />
+    </ThemeProvider>
+  </Provider>,
 );

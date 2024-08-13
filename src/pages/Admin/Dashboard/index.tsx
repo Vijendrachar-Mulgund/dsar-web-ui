@@ -12,9 +12,7 @@ export function Dashboard() {
     dispatch({ type: "user/getUserFetch" });
   }, [dispatch]);
 
-  const handleRedirect = (cell: any) => {
-    console.log("Button Clicked ->", cell);
-  };
+  const handleRedirect = () => {};
 
   return (
     <div className="w-4/5 m-auto">

@@ -1,11 +1,37 @@
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 
 import { Button } from "@/components/ui/button";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Input } from "@/components/ui/input";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { User } from "@/types/auth";
+import { RootState } from "@/store/store";
 
 export function CaseDetail() {
   const { caseId } = useParams();
+
+  const [prompt, setPrompt] = useState("");
+
+  const me: User | null = useSelector((state: RootState) => state.auth.me) as User | null;
+
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    const payload = { caseId: caseId, sender: me?._id };
+    dispatch({ type: "cases/createConnection", payload });
+    dispatch({ type: "cases/receiveInitialMessages" });
+    dispatch({ type: "cases/receiveMessage" });
+
+    return () => {
+      dispatch({ type: "cases/closeConnection" });
+    };
+  }, []);
+
+  const handleSendMessage = () => {
+    const payload = { caseId: caseId, message: prompt, sender: me?._id };
+    dispatch({ type: "cases/sendMessage", payload });
+  };
 
   return (
     <div>
@@ -36,8 +62,12 @@ export function CaseDetail() {
           </div>
 
           <div className="flex items-center gap-2 w-full">
-            <Input placeholder="Type your message..." className="flex-1 rounded-lg p-2 border border-input" />
-            <Button>Send</Button>
+            <Input
+              placeholder="Type your message..."
+              onChange={(event) => setPrompt(event.target.value)}
+              className="flex-1 rounded-lg p-2 border border-input"
+            />
+            <Button onClick={handleSendMessage}>Send</Button>
           </div>
         </div>
       </div>
