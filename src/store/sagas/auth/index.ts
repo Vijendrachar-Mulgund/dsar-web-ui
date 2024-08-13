@@ -23,7 +23,7 @@ function* authenticate(): Generator<any, void, any> {
     const me: User = data?.data?.user;
     yield put(loginSuccess(me));
   } catch (error: any) {
-    console.log("authenticate", error);
+    console.error("authenticate", error);
   }
 }
 

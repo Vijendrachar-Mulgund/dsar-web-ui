@@ -2,39 +2,18 @@ import { ColumnDef } from "@tanstack/react-table";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Case } from "@/types/case";
 import { DataTableColumnHeader } from "@/components/ui/data-table/data-table-column-header";
-import {
-  CheckCircledIcon,
-  CircleIcon,
-  CrossCircledIcon,
-  QuestionMarkCircledIcon,
-  StopwatchIcon,
-} from "@radix-ui/react-icons";
+import { CheckCircledIcon, StopwatchIcon } from "@radix-ui/react-icons";
 
 const statuses = [
   {
-    value: "backlog",
-    label: "Backlog",
-    icon: QuestionMarkCircledIcon,
-  },
-  {
-    value: "todo",
-    label: "Todo",
-    icon: CircleIcon,
-  },
-  {
-    value: "in progress",
-    label: "In Progress",
+    value: "open",
+    label: "Open",
     icon: StopwatchIcon,
   },
   {
-    value: "done",
-    label: "Done",
+    value: "closed",
+    label: "Closed",
     icon: CheckCircledIcon,
-  },
-  {
-    value: "canceled",
-    label: "Canceled",
-    icon: CrossCircledIcon,
   },
 ];
 
@@ -63,7 +42,7 @@ export const columns: ColumnDef<Case>[] = [
   {
     accessorKey: "id",
     header: ({ column }) => <DataTableColumnHeader column={column} title="Case ID" />,
-    cell: ({ row }) => <div className="w-[80px]">{row.getValue("id")}</div>,
+    cell: ({ row }) => <div className="w-[150px]">{row?.original?._id}</div>,
     enableSorting: false,
     enableHiding: false,
   },
@@ -73,7 +52,31 @@ export const columns: ColumnDef<Case>[] = [
     cell: ({ row }) => {
       return (
         <div className="flex space-x-2">
-          <span className="max-w-[500px] truncate font-medium">{row.getValue("title")}</span>
+          <span className="max-w-[500px] truncate font-medium">{row?.original?.title}</span>
+        </div>
+      );
+    },
+    enableHiding: false,
+  },
+  {
+    accessorKey: "description",
+    header: ({ column }) => <DataTableColumnHeader column={column} title="Description" />,
+    cell: ({ row }) => {
+      return (
+        <div className="flex space-x-2">
+          <span className="max-w-[500px] truncate font-medium">{row?.original?.description}</span>
+        </div>
+      );
+    },
+    enableHiding: false,
+  },
+  {
+    accessorKey: "updatedAt",
+    header: ({ column }) => <DataTableColumnHeader column={column} title="Last Updated" />,
+    cell: ({ row }) => {
+      return (
+        <div className="flex space-x-2">
+          <span className="max-w-[500px] truncate font-medium">{`${new Date(row?.original?.updatedAt)}`}</span>
         </div>
       );
     },
@@ -83,7 +86,7 @@ export const columns: ColumnDef<Case>[] = [
     accessorKey: "status",
     header: ({ column }) => <DataTableColumnHeader column={column} title="Status" />,
     cell: ({ row }) => {
-      const status = statuses.find((status) => status.value === row.getValue("status"));
+      const status = statuses.find((status) => status.value?.toUpperCase() === row?.original?.status);
 
       if (!status) {
         return null;

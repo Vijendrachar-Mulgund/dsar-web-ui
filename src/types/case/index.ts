@@ -1,7 +1,15 @@
+import { CaseStatus } from "@/enums/CaseStatus";
+
 export type Case = {
-  id: string;
+  _id: string;
   title: string;
-  status: string;
-  label: string;
-  priority: string;
+  description: string;
+  status: CaseStatus;
+  location: {
+    type: string;
+    coordinates: [number];
+  };
+  createdAt: Date;
+  updatedAt: Date;
+  __v: number;
 };

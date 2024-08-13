@@ -1,18 +1,18 @@
 import { call, put, takeEvery } from "redux-saga/effects";
-import { getAllCasesSuccess, getAllCasesFailure } from "@/store/slices/cases";
+import { getAllCasesSuccess } from "@/store/slices/cases";
 import { axiosInstance } from "@/store/axios";
+import toast from "react-hot-toast";
 
-function* allCases(payload: any): Generator<any, void, any> {
+function* getAllCases(): Generator<any, void, any> {
   try {
-    const body: any = payload?.payload;
-    const data: any = yield call(() => axiosInstance.post("/auth/sign-in", body));
-    const me: any = data?.data?.user;
-    yield put(getAllCasesSuccess(me));
+    const data: any = yield call(() => axiosInstance.get("/case/get-all-cases"));
+    const cases: any = data?.data?.case;
+    yield put(getAllCasesSuccess(cases));
   } catch (error: any) {
-    yield put(getAllCasesFailure(error?.message));
+    toast.error(error?.response?.data?.message);
   }
 }
 
 export function* getAllCasesSaga(): Generator<any, void, any> {
-  yield takeEvery("cases/getAllCases", allCases);
+  yield takeEvery("cases/getAllCases", getAllCases);
 }
