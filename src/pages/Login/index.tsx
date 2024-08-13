@@ -11,6 +11,7 @@ import { login } from "@/store/slices/auth";
 import { RootState } from "@/store/store";
 import { User } from "@/types/auth";
 import { Role } from "@/enums/Role";
+import { useToast } from "@/components/ui/toast/use-toast";
 
 export function Login() {
   const [loginPayload, setLoginPayload] = useState<LoginPayload>({
@@ -19,9 +20,11 @@ export function Login() {
   });
 
   const me: User | null = useSelector((state: RootState) => state.auth.me) as User | null;
+  const error: string | null = useSelector((state: RootState) => state.auth.error) as string | null;
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const { toast } = useToast();
 
   useEffect(() => {
     if (me?.role == Role.admin) {
@@ -32,6 +35,14 @@ export function Login() {
       navigate("/case/list");
     }
   }, [me]);
+
+  useEffect(() => {
+    toast({
+      variant: "destructive",
+      title: "Error",
+      description: error,
+    });
+  }, [error]);
 
   const handleLoginPayloadChange = (key: keyof LoginPayload, event: React.ChangeEvent<HTMLInputElement>) => {
     setLoginPayload((prev) => ({ ...prev, [key]: event.target.value }));

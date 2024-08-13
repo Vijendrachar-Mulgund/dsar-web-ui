@@ -1,11 +1,13 @@
 import { call, put, takeEvery } from "redux-saga/effects";
 import { getUserSuccess, getUserFailure } from "@/store/slices/user";
+import { axiosInstance } from "@/store/axios";
+import { User } from "@/types/auth";
 
 function* fetchUser(): Generator<any, void, any> {
   try {
-    const user: any = yield call(() => fetch("https://jsonplaceholder.typicode.com/users", { method: "GET" }));
-    const userJson = yield user.json();
-    yield put(getUserSuccess(userJson));
+    const data: any = yield call(() => axiosInstance.get("/users/all-users"));
+    const users: User[] = data?.data?.users;
+    yield put(getUserSuccess(users));
   } catch (error: any) {
     yield put(getUserFailure(error?.message));
   }

@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { Header } from "@/components/modules/header";
 import { Footer } from "@/components/modules/footer";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { Toaster } from "@/components/ui/toast/toaster";
 import { User } from "@/types/auth";
 import { Role } from "@/enums/Role";
 
@@ -40,6 +41,8 @@ export function App() {
 
       {/* Footer */}
       <Footer />
+
+      <Toaster />
     </ScrollArea>
   );
 }

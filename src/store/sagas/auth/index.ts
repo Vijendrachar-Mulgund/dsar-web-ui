@@ -1,5 +1,5 @@
 import { call, put, takeEvery } from "redux-saga/effects";
-import { loginSuccess, loginFailure, logoutSuccess } from "@/store/slices/auth";
+import { loginSuccess, loginFailure, logoutSuccess, authenticateFailure } from "@/store/slices/auth";
 import { axiosInstance } from "@/store/axios";
 import { LoginPayload } from "@/types/auth";
 import { User } from "@/types/auth";
@@ -11,7 +11,8 @@ function* login(payload: any): Generator<any, void, any> {
     const me: User = data?.data?.user;
     yield put(loginSuccess(me));
   } catch (error: any) {
-    yield put(loginFailure(error?.message));
+    console.log("login", error);
+    yield put(loginFailure(error?.response?.data?.message));
   }
 }
 
@@ -21,7 +22,7 @@ function* authenticate(): Generator<any, void, any> {
     const me: User = data?.data?.user;
     yield put(loginSuccess(me));
   } catch (error: any) {
-    yield put(loginFailure(error?.message));
+    yield put(authenticateFailure(error?.response?.data?.message));
   }
 }
 
@@ -30,7 +31,7 @@ function* logout(): Generator<any, void, any> {
     yield call(() => axiosInstance.post("/auth/sign-out"));
     yield put(logoutSuccess());
   } catch (error: any) {
-    console.log("logout", error);
+    yield put(loginFailure(error?.response?.data?.message));
   }
 }
 
