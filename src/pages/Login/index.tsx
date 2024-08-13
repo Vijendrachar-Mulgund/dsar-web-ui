@@ -37,11 +37,13 @@ export function Login() {
   }, [me]);
 
   useEffect(() => {
-    toast({
-      variant: "destructive",
-      title: "Error",
-      description: error,
-    });
+    if (error) {
+      toast({
+        variant: "destructive",
+        title: "Error",
+        description: error,
+      });
+    }
   }, [error]);
 
   const handleLoginPayloadChange = (key: keyof LoginPayload, event: React.ChangeEvent<HTMLInputElement>) => {

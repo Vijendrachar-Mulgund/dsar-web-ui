@@ -1,13 +1,13 @@
 import { useEffect } from "react";
+import { Toaster } from "react-hot-toast";
 import { Outlet, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 
+import { User } from "@/types/auth";
+import { Role } from "@/enums/Role";
 import { Header } from "@/components/modules/header";
 import { Footer } from "@/components/modules/footer";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { Toaster } from "@/components/ui/toast/toaster";
-import { User } from "@/types/auth";
-import { Role } from "@/enums/Role";
 
 export function App() {
   const me: User | null = useSelector((state: any) => state.auth.me) as User | null;
