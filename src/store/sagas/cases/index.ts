@@ -1,6 +1,8 @@
-import { call, put, takeEvery } from "redux-saga/effects";
-import { getAllCasesSuccess } from "@/store/slices/cases";
+import { call, put, takeLatest } from "redux-saga/effects";
+import { getAllCasesSuccess, saveMessages } from "@/store/slices/cases";
 import { axiosInstance } from "@/store/axios";
+
+import { store } from "@/store/store";
 
 import { socketio } from "@/store/socket";
 import toast from "react-hot-toast";
@@ -23,7 +25,16 @@ function* createConnection(payload: any): Generator<any, void, any> {
   }
 }
 
-function* receiveInitialMessages(): Generator<any, void, any> {}
+function* receiveInitialMessages(): Generator<any, void, any> {
+  try {
+    socketio.on("initial-messages", (data: any) => {
+      store.dispatch(saveMessages(data));
+    });
+    yield put(saveMessages([]));
+  } catch (error: any) {
+    toast.error(error?.response?.data?.message);
+  }
+}
 
 function* sendMessage(payload: any): Generator<any, void, any> {
   try {
@@ -35,42 +46,41 @@ function* sendMessage(payload: any): Generator<any, void, any> {
 
 function* receiveMessage(): Generator<any, void, any> {
   try {
-    socketio.on("message", (data: any) => {
-      console.log("Received message", data);
-    });
+    socketio.on("message", () => {});
   } catch (error: any) {
     toast.error(error?.response?.data?.message);
   }
 }
 
-function* closeConnection(): Generator<any, void, any> {
+function* closeConnection(payload: any): Generator<any, void, any> {
   try {
-    socketio.close();
+    socketio.emit("leave-room", payload?.payload);
+    socketio.removeAllListeners();
   } catch (error: any) {
     toast.error(error?.response?.data?.message);
   }
 }
 
 export function* getAllCasesSaga(): Generator<any, void, any> {
-  yield takeEvery("cases/getAllCases", getAllCases);
+  yield takeLatest("cases/getAllCases", getAllCases);
 }
 
 export function* createConnectionSaga(): Generator<any, void, any> {
-  yield takeEvery("cases/createConnection", createConnection);
+  yield takeLatest("cases/createConnection", createConnection);
 }
 
 export function* receiveInitialMessagesSaga(): Generator<any, void, any> {
-  yield takeEvery("cases/receiveInitialMessages", receiveInitialMessages);
+  yield takeLatest("cases/receiveInitialMessages", receiveInitialMessages);
 }
 
 export function* sendMessageSaga(): Generator<any, void, any> {
-  yield takeEvery("cases/sendMessage", sendMessage);
+  yield takeLatest("cases/sendMessage", sendMessage);
 }
 
 export function* receiveMessageSaga(): Generator<any, void, any> {
-  yield takeEvery("cases/receiveMessage", receiveMessage);
+  yield takeLatest("cases/receiveMessage", receiveMessage);
 }
 
 export function* closeConnectionSaga(): Generator<any, void, any> {
-  yield takeEvery("cases/closeConnection", closeConnection);
+  yield takeLatest("cases/closeConnection", closeConnection);
 }
