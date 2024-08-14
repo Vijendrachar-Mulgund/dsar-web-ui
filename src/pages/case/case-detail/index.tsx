@@ -42,7 +42,7 @@ export function CaseDetail() {
 
         {/* Chat Box */}
         <div className="min-h-96">
-          <div className="flex flex-col gap-4 w-full mx-auto border rounded-lg pt-4 h-[500px] overflow-auto">
+          <div className="flex flex-col gap-4 w-full mx-auto border rounded-lg pt-4 h-[750px] overflow-auto">
             {messages?.length ? (
               messages?.map((message: any) => {
                 return (

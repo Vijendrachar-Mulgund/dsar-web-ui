@@ -18,6 +18,10 @@ export const casesSlice = createSlice({
     saveMessages: (state, action) => {
       state.messages = action.payload;
     },
+    appendMessage: (state, action) => {
+      console.log("appendMessage", action.payload);
+      state.messages.push(action.payload);
+    },
     createConnection: () => {},
     sendMessage: () => {},
     receiveMessage: () => {},
@@ -36,6 +40,7 @@ export const {
   receiveMessage,
   receiveInitialMessages,
   saveMessages,
+  appendMessage,
   closeConnection,
 } = casesSlice.actions;
 export default casesSlice.reducer;
