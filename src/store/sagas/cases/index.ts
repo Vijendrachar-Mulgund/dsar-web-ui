@@ -1,5 +1,5 @@
 import { call, put, takeLatest } from "redux-saga/effects";
-import { getAllCasesSuccess, saveMessages, appendMessage } from "@/store/slices/cases";
+import { getAllCasesSuccess, saveInitialMessages, saveMessage } from "@/store/slices/cases";
 import { axiosInstance } from "@/store/axios";
 
 import { store } from "@/store/store";
@@ -28,7 +28,7 @@ function* createConnection(payload: any): Generator<any, void, any> {
 function* receiveInitialMessages(): Generator<any, void, any> {
   try {
     socketio.on("initial-messages", (data: any) => {
-      store.dispatch(saveMessages(data));
+      store.dispatch(saveInitialMessages(data));
     });
   } catch (error: any) {
     toast.error(error?.response?.data?.message);
@@ -46,7 +46,7 @@ function* sendMessage(payload: any): Generator<any, void, any> {
 function* receiveMessage(): Generator<any, void, any> {
   try {
     socketio.on("message", (data) => {
-      store.dispatch(appendMessage(data));
+      store.dispatch(saveMessage(data));
     });
   } catch (error: any) {
     toast.error(error?.response?.data?.message);

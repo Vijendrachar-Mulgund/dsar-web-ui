@@ -23,9 +23,7 @@ function* authenticate(): Generator<any, void, any> {
     const me: User = data?.data?.user;
     yield put(loginSuccess(me));
   } catch (error: any) {
-    toast("Please login to continue", {
-      icon: "⚠️",
-    });
+    toast("Please login to continue", { icon: "⚠️" });
   }
 }
 

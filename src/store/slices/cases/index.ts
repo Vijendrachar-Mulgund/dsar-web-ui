@@ -1,10 +1,10 @@
+import { Case, Message } from "@/types/case";
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-  cases: [],
-  messages: [],
-  isLoading: false,
-  socketConnection: false,
+  cases: [] as Case[],
+  messages: [] as Message[],
+  isLoading: false as boolean,
 };
 
 export const casesSlice = createSlice({
@@ -12,15 +12,14 @@ export const casesSlice = createSlice({
   initialState,
   reducers: {
     getAllCasesSuccess: (state, action) => {
-      state.cases = action.payload;
+      state.cases = action?.payload;
       state.isLoading = false;
     },
-    saveMessages: (state, action) => {
-      state.messages = action.payload;
+    saveInitialMessages: (state, action) => {
+      state.messages = action?.payload;
     },
-    appendMessage: (state, action) => {
-      console.log("appendMessage", action.payload);
-      state.messages.push(action.payload);
+    saveMessage: (state, action) => {
+      state.messages.push(action?.payload);
     },
     createConnection: () => {},
     sendMessage: () => {},
@@ -39,8 +38,8 @@ export const {
   sendMessage,
   receiveMessage,
   receiveInitialMessages,
-  saveMessages,
-  appendMessage,
+  saveInitialMessages,
+  saveMessage,
   closeConnection,
 } = casesSlice.actions;
 export default casesSlice.reducer;
