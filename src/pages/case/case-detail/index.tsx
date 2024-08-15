@@ -17,6 +17,7 @@ export function CaseDetail() {
   const { caseId } = useParams();
 
   const [prompt, setPrompt] = useState("");
+  const [currentLocation, setCurrentLocation] = useState({ lat: 0, lng: 0 });
 
   const me: User | null = useSelector((state: RootState) => state.auth.me) as User | null;
   const messages: any = useSelector((state: RootState) => state.cases.messages);
@@ -29,14 +30,41 @@ export function CaseDetail() {
     dispatch({ type: "cases/receiveInitialMessages" });
     dispatch({ type: "cases/receiveMessage" });
 
+    getCurrentLocation();
+
+    initMapbox();
+
+    return () => {
+      dispatch({ type: "cases/closeChatConnection", payload: { caseId } });
+    };
+  }, []);
+
+  const getCurrentLocation = () => {
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        setCurrentLocation({
+          lat: position.coords.latitude,
+          lng: position.coords.longitude,
+        });
+      },
+      (error) => {
+        console.error(error);
+      },
+      { enableHighAccuracy: true },
+    );
+  };
+
+  const initMapbox = () => {
     mapboxgl.accessToken = import.meta.env.VITE_MAPBOX_ACCESS_TOKEN as string;
 
     const map = new mapboxgl.Map({
       container: "map",
       style: "mapbox://styles/mapbox/streets-v12",
-      center: [-3.170606, 54.443657], // starting position [lng, lat]
+      center: [currentLocation.lng, currentLocation.lat], // starting position [lng, lat]
       zoom: 10, // starting zoom
     });
+
+    map.addControl(new mapboxgl.NavigationControl());
 
     map.addControl(
       new MapboxDirections({
@@ -44,11 +72,7 @@ export function CaseDetail() {
       }),
       "top-left",
     );
-
-    return () => {
-      dispatch({ type: "cases/closeChatConnection", payload: { caseId } });
-    };
-  }, []);
+  };
 
   const handleSendMessage = () => {
     const payload = { caseId: caseId, message: prompt, sender: me?._id };
