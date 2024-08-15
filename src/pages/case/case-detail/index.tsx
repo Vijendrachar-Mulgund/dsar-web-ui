@@ -7,6 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { User } from "@/types/auth";
 import { RootState } from "@/store/store";
+import mapboxgl from "mapbox-gl";
 
 export function CaseDetail() {
   const { caseId } = useParams();
@@ -24,6 +25,74 @@ export function CaseDetail() {
     dispatch({ type: "cases/receiveInitialMessages" });
     dispatch({ type: "cases/receiveMessage" });
 
+    mapboxgl.accessToken = import.meta.env.VITE_MAPBOX_ACCESS_TOKEN as string;
+
+    const map = new mapboxgl.Map({
+      container: "map",
+      style: "mapbox://styles/mapbox/streets-v12",
+      center: [-3.170606, 54.443657], // starting position [lng, lat]
+      zoom: 10, // starting zoom
+    });
+
+    const start: any = [];
+    navigator.geolocation.getCurrentPosition((position) => {
+      start.push(position.coords.longitude, position.coords.latitude);
+    });
+
+    // new mapboxgl.Marker().setLngLat([-3.170606, 54.443657]).addTo(map);
+
+    // const start = [-2.49444, 53.740336]; // Source coordinates [lng, lat]
+    const end = [-2.533587, 53.992786]; // Destination coordinates [lng, lat]
+
+    // Get route from Mapbox Directions API
+    async function getRoute(start: any, end: any) {
+      const query = await fetch(
+        `https://api.mapbox.com/directions/v5/mapbox/walking/${start[0]},${start[1]};${end[0]},${end[1]}?steps=true&geometries=geojson&access_token=${mapboxgl.accessToken}`,
+        { method: "GET" },
+      );
+      const json = await query.json();
+      const data = json.routes[0];
+      const route = data.geometry.coordinates;
+      const geojson: any = {
+        type: "Feature",
+        properties: {},
+        geometry: {
+          type: "LineString",
+          coordinates: route,
+        },
+      };
+
+      if (map && map.getSource("route")) {
+        map.getSource("route").setData(geojson);
+      } else {
+        map.addLayer({
+          id: "route",
+          type: "line",
+          source: {
+            type: "geojson",
+            data: geojson,
+          },
+          layout: {
+            "line-join": "round",
+            "line-cap": "round",
+          },
+          paint: {
+            "line-color": "#3887be",
+            "line-width": 5,
+            "line-opacity": 0.75,
+          },
+        });
+      }
+    }
+
+    map.on("load", () => {
+      getRoute(start, end);
+
+      // Add start and end markers
+      new mapboxgl.Marker().setLngLat(start).addTo(map);
+      new mapboxgl.Marker().setLngLat(end).addTo(map);
+    });
+
     return () => {
       dispatch({ type: "cases/closeChatConnection", payload: { caseId } });
     };
@@ -39,6 +108,8 @@ export function CaseDetail() {
       <div className="w-4/5 m-auto">
         <h1 className="text-4xl text-center font-bold ">Case Detail</h1>
         <div className="text-muted-foreground text-center my-5">Case ID: {caseId}</div>
+
+        <div id="map" className="w-full h-[500px]"></div>
 
         {/* Chat Box */}
         <div className="min-h-96">
