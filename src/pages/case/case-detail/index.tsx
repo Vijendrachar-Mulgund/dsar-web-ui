@@ -20,12 +20,12 @@ export function CaseDetail() {
 
   useEffect(() => {
     const payload = { caseId: caseId, sender: me?._id };
-    dispatch({ type: "cases/createConnection", payload });
+    dispatch({ type: "cases/createChatConnection", payload });
     dispatch({ type: "cases/receiveInitialMessages" });
     dispatch({ type: "cases/receiveMessage" });
 
     return () => {
-      dispatch({ type: "cases/closeConnection", payload: { caseId } });
+      dispatch({ type: "cases/closeChatConnection", payload: { caseId } });
     };
   }, []);
 

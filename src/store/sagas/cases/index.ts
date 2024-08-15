@@ -4,7 +4,7 @@ import { axiosInstance } from "@/store/axios";
 
 import { store } from "@/store/store";
 
-import { socketio } from "@/store/socket";
+import { aiChatSocketio } from "@/store/socket";
 import toast from "react-hot-toast";
 
 function* getAllCases(): Generator<any, void, any> {
@@ -17,9 +17,9 @@ function* getAllCases(): Generator<any, void, any> {
   }
 }
 
-function* createConnection(payload: any): Generator<any, void, any> {
+function* createChatConnection(payload: any): Generator<any, void, any> {
   try {
-    socketio.emit("join-room", payload?.payload);
+    aiChatSocketio.emit("join-room", payload?.payload);
   } catch (error: any) {
     toast.error(error?.response?.data?.message);
   }
@@ -27,7 +27,7 @@ function* createConnection(payload: any): Generator<any, void, any> {
 
 function* receiveInitialMessages(): Generator<any, void, any> {
   try {
-    socketio.on("initial-messages", (data: any) => {
+    aiChatSocketio.on("initial-messages", (data: any) => {
       store.dispatch(saveInitialMessages(data));
     });
   } catch (error: any) {
@@ -37,7 +37,7 @@ function* receiveInitialMessages(): Generator<any, void, any> {
 
 function* sendMessage(payload: any): Generator<any, void, any> {
   try {
-    socketio.emit("message", payload?.payload);
+    aiChatSocketio.emit("message", payload?.payload);
   } catch (error: any) {
     toast.error(error?.response?.data?.message);
   }
@@ -45,7 +45,7 @@ function* sendMessage(payload: any): Generator<any, void, any> {
 
 function* receiveMessage(): Generator<any, void, any> {
   try {
-    socketio.on("message", (data) => {
+    aiChatSocketio.on("message", (data) => {
       store.dispatch(saveMessage(data));
     });
   } catch (error: any) {
@@ -53,10 +53,10 @@ function* receiveMessage(): Generator<any, void, any> {
   }
 }
 
-function* closeConnection(payload: any): Generator<any, void, any> {
+function* closeChatConnection(payload: any): Generator<any, void, any> {
   try {
-    socketio.emit("leave-room", payload?.payload);
-    socketio.removeAllListeners();
+    aiChatSocketio.emit("leave-room", payload?.payload);
+    aiChatSocketio.removeAllListeners();
   } catch (error: any) {
     toast.error(error?.response?.data?.message);
   }
@@ -66,8 +66,8 @@ export function* getAllCasesSaga(): Generator<any, void, any> {
   yield takeLatest("cases/getAllCases", getAllCases);
 }
 
-export function* createConnectionSaga(): Generator<any, void, any> {
-  yield takeLatest("cases/createConnection", createConnection);
+export function* createChatConnectionSaga(): Generator<any, void, any> {
+  yield takeLatest("cases/createChatConnection", createChatConnection);
 }
 
 export function* receiveInitialMessagesSaga(): Generator<any, void, any> {
@@ -82,6 +82,6 @@ export function* receiveMessageSaga(): Generator<any, void, any> {
   yield takeLatest("cases/receiveMessage", receiveMessage);
 }
 
-export function* closeConnectionSaga(): Generator<any, void, any> {
-  yield takeLatest("cases/closeConnection", closeConnection);
+export function* closeChatConnectionSaga(): Generator<any, void, any> {
+  yield takeLatest("cases/closeChatConnection", closeChatConnection);
 }

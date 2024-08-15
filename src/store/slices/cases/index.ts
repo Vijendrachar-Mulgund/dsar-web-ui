@@ -21,7 +21,7 @@ export const casesSlice = createSlice({
     saveMessage: (state, action) => {
       state.messages.push(action?.payload);
     },
-    createConnection: () => {},
+    createChatConnection: () => {},
     sendMessage: () => {},
     receiveMessage: () => {},
     receiveInitialMessages: () => {},
@@ -35,6 +35,7 @@ export const {
   getAllCases,
   getAllCasesSuccess,
   getAllCasesFailure,
+  createChatConnection,
   sendMessage,
   receiveMessage,
   receiveInitialMessages,

@@ -1,7 +1,11 @@
 import io from "socket.io-client";
 
-const socketUrl = import.meta.env.VITE_SOCKET_URL;
+const aiChatSocketUrl = import.meta.env.VITE_AI_CHAT_SOCKET_URL;
 
-const socketio = io(socketUrl);
+const caseSocketUrl = import.meta.env.VITE_CASE_SOCKET_URL;
 
-export { socketio };
+const aiChatSocketio = io(aiChatSocketUrl);
+
+const caseSocketio = io(caseSocketUrl);
+
+export { aiChatSocketio, caseSocketio };

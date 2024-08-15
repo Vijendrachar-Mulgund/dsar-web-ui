@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 
 import { Button } from "@/components/ui/button";
@@ -29,6 +29,7 @@ export function Header({ me }: HeaderProps) {
   const [menuItems, setMenuItems] = useState<Array<MenuItem> | null>(null);
 
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   // Mounted
   useEffect(() => {
@@ -36,6 +37,9 @@ export function Header({ me }: HeaderProps) {
       setMenuItems(AdminMenu);
     } else if (me?.role == Role.teamLeader || me?.role == Role.teamMember) {
       setMenuItems(CaseMenu);
+    } else if (!me) {
+      setMenuItems(null);
+      navigate("/login");
     }
   }, [me]);
 
@@ -63,7 +67,7 @@ export function Header({ me }: HeaderProps) {
                 return (
                   <Link
                     key={menuItem?.path}
-                    to={menuItem?.path}
+                    to={menuItem?.path ?? "#"}
                     className="flex w-full items-center py-2 text-lg font-semibold"
                   >
                     {menuItem.title}
@@ -84,7 +88,7 @@ export function Header({ me }: HeaderProps) {
               return (
                 <NavigationMenuLink key={menuItem?.path} asChild>
                   <Link
-                    to={menuItem?.path}
+                    to={menuItem?.path ?? "#"}
                     className="group inline-flex h-9 w-max items-center justify-center rounded-md bg-white px-4 py-2 text-sm font-medium transition-colors hover:bg-gray-100 hover:text-gray-900 focus:bg-gray-100 focus:text-gray-900 focus:outline-none disabled:pointer-events-none disabled:opacity-50 data-[active]:bg-gray-100/50 data-[state=open]:bg-gray-100/50 dark:bg-gray-950 dark:hover:bg-gray-800 dark:hover:text-gray-50 dark:focus:bg-gray-800 dark:focus:text-gray-50 dark:data-[active]:bg-gray-800/50 dark:data-[state=open]:bg-gray-800/50"
                   >
                     {menuItem.title}
