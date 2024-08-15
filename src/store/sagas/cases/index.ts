@@ -79,6 +79,7 @@ function* closeChatConnection(payload: any): Generator<any, void, any> {
   }
 }
 
+// Case
 export function* getAllCasesSaga(): Generator<any, void, any> {
   yield takeLatest("cases/getAllCases", getAllCases);
 }
@@ -91,6 +92,7 @@ export function* closeCaseConnectionSaga(): Generator<any, void, any> {
   yield takeLatest("cases/closeCaseConnection", closeCaseConnection);
 }
 
+// Chat
 export function* createChatConnectionSaga(): Generator<any, void, any> {
   yield takeLatest("cases/createChatConnection", createChatConnection);
 }
