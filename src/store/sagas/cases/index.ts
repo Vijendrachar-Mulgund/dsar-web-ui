@@ -1,22 +1,39 @@
-import { call, put, takeLatest } from "redux-saga/effects";
-import { getAllCasesSuccess, saveInitialMessages, saveMessage } from "@/store/slices/cases";
-import { axiosInstance } from "@/store/axios";
+import { takeLatest } from "redux-saga/effects";
+import { saveInitialMessages, saveMessage } from "@/store/slices/cases";
 
 import { store } from "@/store/store";
 
-import { aiChatSocketio } from "@/store/socket";
+import { aiChatSocketio, caseSocketio } from "@/store/socket";
 import toast from "react-hot-toast";
 
-function* getAllCases(): Generator<any, void, any> {
+// Cases
+function* createCaseConnection(): Generator<any, void, any> {
   try {
-    const data: any = yield call(() => axiosInstance.get("/case/get-all-cases"));
-    const cases: any = data?.data?.case;
-    yield put(getAllCasesSuccess(cases));
+    caseSocketio.emit("get-all-cases");
   } catch (error: any) {
     toast.error(error?.response?.data?.message);
   }
 }
 
+function* getAllCases(): Generator<any, void, any> {
+  try {
+    caseSocketio.on("all-cases", (data: any) => {
+      store.dispatch({ type: "cases/getAllCasesSuccess", payload: data });
+    });
+  } catch (error: any) {
+    toast.error(error?.response?.data?.message);
+  }
+}
+
+function* closeCaseConnection(): Generator<any, void, any> {
+  try {
+    caseSocketio.removeAllListeners();
+  } catch (error: any) {
+    toast.error(error?.response?.data?.message);
+  }
+}
+
+// Chat
 function* createChatConnection(payload: any): Generator<any, void, any> {
   try {
     aiChatSocketio.emit("join-room", payload?.payload);
@@ -64,6 +81,14 @@ function* closeChatConnection(payload: any): Generator<any, void, any> {
 
 export function* getAllCasesSaga(): Generator<any, void, any> {
   yield takeLatest("cases/getAllCases", getAllCases);
+}
+
+export function* createCaseConnectionSaga(): Generator<any, void, any> {
+  yield takeLatest("cases/createCaseConnection", createCaseConnection);
+}
+
+export function* closeCaseConnectionSaga(): Generator<any, void, any> {
+  yield takeLatest("cases/closeCaseConnection", closeCaseConnection);
 }
 
 export function* createChatConnectionSaga(): Generator<any, void, any> {

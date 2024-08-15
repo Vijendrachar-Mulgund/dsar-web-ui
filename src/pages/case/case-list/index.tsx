@@ -16,7 +16,12 @@ export function CaseList() {
   const navigate = useNavigate();
 
   useEffect(() => {
+    dispatch({ type: "cases/createCaseConnection" });
     dispatch({ type: "cases/getAllCases" });
+
+    return () => {
+      dispatch({ type: "cases/closeCaseConnection" });
+    };
   }, []);
 
   const handleRedirect = (cell: any) => {

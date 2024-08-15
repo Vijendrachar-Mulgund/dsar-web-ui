@@ -11,6 +11,7 @@ export const casesSlice = createSlice({
   name: "cases",
   initialState,
   reducers: {
+    getAllCases: () => {},
     getAllCasesSuccess: (state, action) => {
       state.cases = action?.payload;
       state.isLoading = false;
@@ -25,9 +26,9 @@ export const casesSlice = createSlice({
     sendMessage: () => {},
     receiveMessage: () => {},
     receiveInitialMessages: () => {},
-    getAllCases: () => {},
     getAllCasesFailure: () => {},
-    closeConnection: () => {},
+    closeChatConnection: () => {},
+    closeCaseConnection: () => {},
   },
 });
 
@@ -41,6 +42,7 @@ export const {
   receiveInitialMessages,
   saveInitialMessages,
   saveMessage,
-  closeConnection,
+  closeChatConnection,
+  closeCaseConnection,
 } = casesSlice.actions;
 export default casesSlice.reducer;
