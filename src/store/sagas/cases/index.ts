@@ -18,7 +18,7 @@ function* createCaseConnection(): Generator<any, void, any> {
 function* getAllCases(): Generator<any, void, any> {
   try {
     caseSocketio.on("all-cases", (data: any) => {
-      store.dispatch({ type: "cases/getAllCasesSuccess", payload: data });
+      store.dispatch({ type: "cases/getAllCasesSuccess", payload: data?.data });
     });
   } catch (error: any) {
     toast.error(error?.response?.data?.message);
