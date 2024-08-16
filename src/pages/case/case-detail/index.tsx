@@ -12,15 +12,13 @@ import mapboxgl from "mapbox-gl";
 // @ts-ignore
 import MapboxDirections from "@mapbox/mapbox-gl-directions/dist/mapbox-gl-directions";
 import "@mapbox/mapbox-gl-directions/dist/mapbox-gl-directions.css";
-import VideoPlayer from "@/components/modules/video-palyer";
+import VideoPlayer from "@/components/modules/video-player";
 
 export function CaseDetail() {
   const { caseId } = useParams();
 
   const [prompt, setPrompt] = useState("");
   const [currentLocation, setCurrentLocation] = useState({ lat: 0, lng: 0 });
-  // const [map, setMap] = useState<any>(null);
-  // let map: any;
 
   const me: User | null = useSelector((state: RootState) => state.auth.me) as User | null;
   const messages: any = useSelector((state: RootState) => state.cases.messages);
@@ -49,7 +47,6 @@ export function CaseDetail() {
   }, []);
 
   useEffect(() => {
-    console.log("caseDetail", caseDetail?.location);
     if (caseDetail?.location) {
       const map = initMapbox(
         +caseDetail?.location?.coordinates[0],
@@ -132,7 +129,7 @@ export function CaseDetail() {
 
   return (
     <div>
-      <div className="w-4/5 m-auto">
+      <div className="w-11/12 m-auto">
         <h1 className="text-4xl text-center font-bold ">Case Detail</h1>
         <div className="text-muted-foreground text-center my-5">Case ID: {caseId}</div>
 
@@ -143,13 +140,41 @@ export function CaseDetail() {
           width="600px"
         />
 
-        <div className="grid grid-cols-2 gap-4">
-          {/* Map Box */}
-          <div id="map" className="w-full h-[750px] border rounded-lg my-10"></div>
+        <div className="grid grid-cols-4 gap-4 h-[750px] my-10">
+          <div className="cols-span-1 flex items-center justify-center h-full">
+            <div className="flex flex-col items-center justify-center">
+              <h1 className="text-2xl">Location Information</h1>
 
+              <h1 className="text-xl my-5">Your current location</h1>
+              <h1>
+                <span className="font-bold">Longitude: </span>
+                {currentLocation?.lng}, <span className="font-bold">Latitude: </span> {currentLocation?.lat}
+              </h1>
+
+              {caseDetail?.location ? (
+                <>
+                  <h1 className="text-xl my-5">Discovered location</h1>
+                  <h1>
+                    <span className="font-bold">Longitude: </span>
+                    {currentLocation?.lng}, <span className="font-bold">Latitude: </span> {currentLocation?.lat}
+                  </h1>
+                </>
+              ) : (
+                ""
+              )}
+            </div>
+          </div>
+
+          <div className="col-span-3">
+            {/* Map Box */}
+            <div id="map" className="w-full h-full border rounded-lg"></div>
+          </div>
+        </div>
+
+        <div className="col-span-1">
           {/* Chat Box */}
-          <div className="min-h-96 my-10">
-            <div className="flex flex-col gap-4 w-full mx-auto border rounded-lg pt-4 h-[750px] overflow-auto">
+          <div className="min-h-96 my-10 col-span-3">
+            <div className="flex flex-col gap-4 w-full mx-auto border rounded-lg pt-4 h-[750px] overflow-auto ">
               {messages?.length ? (
                 messages?.map((message: any) => {
                   return (

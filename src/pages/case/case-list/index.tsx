@@ -29,7 +29,7 @@ export function CaseList() {
   };
 
   return (
-    <div className="w-4/5 m-auto">
+    <div className="w-11/12 m-auto">
       <h1 className="text-4xl text-center font-bold my-20">Welcome, {`${me?.firstname} ${me?.lastname}`}!</h1>
 
       <div className="text-muted-foreground text-center my-10">Here's a list of all the cases.</div>

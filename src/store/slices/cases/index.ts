@@ -12,7 +12,6 @@ export const casesSlice = createSlice({
   name: "cases",
   initialState,
   reducers: {
-    getAllCases: () => {},
     getAllCasesSuccess: (state, action) => {
       state.cases = action?.payload;
       state.isLoading = false;
@@ -43,7 +42,6 @@ export const casesSlice = createSlice({
 });
 
 export const {
-  getAllCases,
   getAllCasesSuccess,
   getAllCasesFailure,
   createChatConnection,

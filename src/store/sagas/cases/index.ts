@@ -45,6 +45,7 @@ function* getCaseDetail(): Generator<any, void, any> {
 
 function* leaveCaseRoom(payload: any): Generator<any, void, any> {
   try {
+    caseSocketio.removeListener("case-detail");
     caseSocketio.emit("leave-room", payload?.payload);
     store.dispatch({ type: "cases/clearCurrentCase" });
   } catch (error: any) {

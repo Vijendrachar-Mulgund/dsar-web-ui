@@ -49,7 +49,7 @@ export function Header({ me }: HeaderProps) {
 
   return (
     <header className="flex fixed h-20 w-full shrink-0 px-4 md:px-6">
-      <div className="flex m-auto w-4/5 items-center justify-center">
+      <div className="flex m-auto w-11/12 items-center justify-center">
         {/* Mobile View */}
         <Sheet>
           <SheetTrigger asChild>
