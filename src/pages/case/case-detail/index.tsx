@@ -18,26 +18,52 @@ export function CaseDetail() {
 
   const [prompt, setPrompt] = useState("");
   const [currentLocation, setCurrentLocation] = useState({ lat: 0, lng: 0 });
+  // const [map, setMap] = useState<any>(null);
+  // let map: any;
 
   const me: User | null = useSelector((state: RootState) => state.auth.me) as User | null;
   const messages: any = useSelector((state: RootState) => state.cases.messages);
+  const caseDetail: any = useSelector((state: RootState) => state.cases.currentCase);
 
   const dispatch = useDispatch();
 
   useEffect(() => {
     const payload = { caseId: caseId, sender: me?._id };
+
+    // Chat
     dispatch({ type: "cases/createChatConnection", payload });
     dispatch({ type: "cases/receiveInitialMessages" });
     dispatch({ type: "cases/receiveMessage" });
 
-    getCurrentLocation();
+    // Case
+    dispatch({ type: "cases/joinCaseRoom", payload });
+    dispatch({ type: "cases/getCaseDetail", payload });
 
-    initMapbox();
+    getCurrentLocation();
 
     return () => {
       dispatch({ type: "cases/closeChatConnection", payload: { caseId } });
     };
   }, []);
+
+  useEffect(() => {
+    if (caseDetail?.location) {
+      const map = initMapbox(
+        +caseDetail?.location?.coordinates[0],
+        +caseDetail?.location?.coordinates[1],
+        currentLocation?.lng,
+        currentLocation?.lat,
+        +caseDetail?.location?.coordinates[0],
+        +caseDetail?.location?.coordinates[1],
+      );
+
+      new mapboxgl.Marker()
+        .setLngLat([+caseDetail?.location?.coordinates[0], +caseDetail?.location?.coordinates[1]])
+        .addTo(map);
+    } else {
+      initMapbox(currentLocation?.lng, currentLocation?.lat);
+    }
+  }, [caseDetail?.location]);
 
   const getCurrentLocation = () => {
     navigator.geolocation.getCurrentPosition(
@@ -54,24 +80,40 @@ export function CaseDetail() {
     );
   };
 
-  const initMapbox = () => {
+  const initMapbox = (
+    long: number,
+    lat: number,
+    sourceLong?: number,
+    sourceLat?: number,
+    destinationLong?: number,
+    destinationLat?: number,
+  ) => {
     mapboxgl.accessToken = import.meta.env.VITE_MAPBOX_ACCESS_TOKEN as string;
 
-    const map = new mapboxgl.Map({
+    const mapbox = new mapboxgl.Map({
       container: "map",
       style: "mapbox://styles/mapbox/streets-v12",
-      center: [currentLocation.lng, currentLocation.lat], // starting position [lng, lat]
-      zoom: 10, // starting zoom
+      center: [long, lat], // starting position [lng, lat]
+      zoom: 6, // starting zoom
     });
 
-    map.addControl(new mapboxgl.NavigationControl());
+    mapbox.addControl(new mapboxgl.NavigationControl());
 
-    map.addControl(
-      new MapboxDirections({
-        accessToken: mapboxgl.accessToken,
-      }),
-      "top-left",
-    );
+    const directions = new MapboxDirections({
+      accessToken: mapboxgl.accessToken,
+      unit: "metric",
+      geometries: "polyline",
+    });
+
+    mapbox.addControl(directions, "top-left");
+
+    if (!sourceLong || !sourceLat || !destinationLong || !destinationLat) return mapbox;
+
+    directions.setOrigin([sourceLong, sourceLat]); // Example: [longitude, latitude]
+
+    directions.setDestination([destinationLong, destinationLat]); // Example: [longitude, latitude]
+
+    return mapbox;
   };
 
   const handleSendMessage = () => {

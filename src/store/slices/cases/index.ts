@@ -4,6 +4,7 @@ import { createSlice } from "@reduxjs/toolkit";
 const initialState = {
   cases: [] as Case[],
   messages: [] as Message[],
+  currentCase: {} as Case,
   isLoading: false as boolean,
 };
 
@@ -22,6 +23,11 @@ export const casesSlice = createSlice({
     saveMessage: (state, action) => {
       state.messages.push(action?.payload);
     },
+    getCaseDetail: () => {},
+    getCaseDetailSuccess: (state, action) => {
+      state.currentCase = action?.payload;
+    },
+    joinCaseRoomSaga: () => {},
     createChatConnection: () => {},
     sendMessage: () => {},
     receiveMessage: () => {},
@@ -41,6 +47,9 @@ export const {
   receiveMessage,
   receiveInitialMessages,
   saveInitialMessages,
+  joinCaseRoomSaga,
+  getCaseDetail,
+  getCaseDetailSuccess,
   saveMessage,
   closeChatConnection,
   closeCaseConnection,

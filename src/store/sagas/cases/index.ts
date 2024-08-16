@@ -25,6 +25,24 @@ function* getAllCases(): Generator<any, void, any> {
   }
 }
 
+function* joinCaseRoom(payload: any): Generator<any, void, any> {
+  try {
+    caseSocketio.emit("join-room", payload?.payload);
+  } catch (error: any) {
+    toast.error(error?.response?.data?.message);
+  }
+}
+
+function* getCaseDetail(): Generator<any, void, any> {
+  try {
+    caseSocketio.on("case-detail", (data: any) => {
+      store.dispatch({ type: "cases/getCaseDetailSuccess", payload: data?.data });
+    });
+  } catch (error: any) {
+    toast.error(error?.response?.data?.message);
+  }
+}
+
 function* closeCaseConnection(): Generator<any, void, any> {
   try {
     caseSocketio.removeAllListeners();
@@ -86,6 +104,14 @@ export function* getAllCasesSaga(): Generator<any, void, any> {
 
 export function* createCaseConnectionSaga(): Generator<any, void, any> {
   yield takeLatest("cases/createCaseConnection", createCaseConnection);
+}
+
+export function* joinCaseRoomSaga(): Generator<any, void, any> {
+  yield takeLatest("cases/joinCaseRoom", joinCaseRoom);
+}
+
+export function* getCaseDetailSaga(): Generator<any, void, any> {
+  yield takeLatest("cases/getCaseDetail", getCaseDetail);
 }
 
 export function* closeCaseConnectionSaga(): Generator<any, void, any> {
