@@ -27,6 +27,10 @@ export const casesSlice = createSlice({
     getCaseDetailSuccess: (state, action) => {
       state.currentCase = action?.payload;
     },
+    leaveCaseRoom: () => {},
+    clearCurrentCase: (state) => {
+      state.currentCase = {};
+    },
     joinCaseRoomSaga: () => {},
     createChatConnection: () => {},
     sendMessage: () => {},
@@ -50,6 +54,8 @@ export const {
   joinCaseRoomSaga,
   getCaseDetail,
   getCaseDetailSuccess,
+  leaveCaseRoom,
+  clearCurrentCase,
   saveMessage,
   closeChatConnection,
   closeCaseConnection,

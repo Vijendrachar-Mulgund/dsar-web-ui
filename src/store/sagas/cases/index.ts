@@ -43,6 +43,15 @@ function* getCaseDetail(): Generator<any, void, any> {
   }
 }
 
+function* leaveCaseRoom(payload: any): Generator<any, void, any> {
+  try {
+    caseSocketio.emit("leave-room", payload?.payload);
+    store.dispatch({ type: "cases/clearCurrentCase" });
+  } catch (error: any) {
+    toast.error(error?.response?.data?.message);
+  }
+}
+
 function* closeCaseConnection(): Generator<any, void, any> {
   try {
     caseSocketio.removeAllListeners();
@@ -112,6 +121,10 @@ export function* joinCaseRoomSaga(): Generator<any, void, any> {
 
 export function* getCaseDetailSaga(): Generator<any, void, any> {
   yield takeLatest("cases/getCaseDetail", getCaseDetail);
+}
+
+export function* leaveCaseRoomSaga(): Generator<any, void, any> {
+  yield takeLatest("cases/leaveCaseRoom", leaveCaseRoom);
 }
 
 export function* closeCaseConnectionSaga(): Generator<any, void, any> {
