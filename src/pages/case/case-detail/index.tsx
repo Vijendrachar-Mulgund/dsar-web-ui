@@ -13,6 +13,8 @@ import mapboxgl from "mapbox-gl";
 import MapboxDirections from "@mapbox/mapbox-gl-directions/dist/mapbox-gl-directions";
 import "@mapbox/mapbox-gl-directions/dist/mapbox-gl-directions.css";
 import VideoPlayer from "@/components/modules/video-player";
+import { SenderType } from "@/enums/SenderType";
+import Markdown from "react-markdown";
 
 export function CaseDetail() {
   const { caseId } = useParams();
@@ -123,7 +125,7 @@ export function CaseDetail() {
   };
 
   const handleSendMessage = () => {
-    const payload = { caseId: caseId, message: prompt, sender: me?._id };
+    const payload = { case: caseId, message: prompt, sender: me?._id, senderType: SenderType.user };
     dispatch({ type: "cases/sendMessage", payload });
   };
 
@@ -189,7 +191,7 @@ export function CaseDetail() {
                           <div className="text-muted-foreground">{`${new Date(message?.updatedAt)}`}</div>
                         </div>
                         <div className="bg-card border-solid border-2 border-primary-foreground rounded-2xl p-4 max-w-full">
-                          <p>{message?.message}</p>
+                          <Markdown>{message?.message}</Markdown>
                         </div>
                       </div>
                     </div>
