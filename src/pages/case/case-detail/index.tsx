@@ -15,6 +15,7 @@ import "@mapbox/mapbox-gl-directions/dist/mapbox-gl-directions.css";
 import VideoPlayer from "@/components/modules/video-player";
 import { SenderType } from "@/enums/SenderType";
 import Markdown from "react-markdown";
+import toast from "react-hot-toast";
 
 export function CaseDetail() {
   const { caseId } = useParams();
@@ -25,6 +26,7 @@ export function CaseDetail() {
   const me: User | null = useSelector((state: RootState) => state.auth.me) as User | null;
   const messages: any = useSelector((state: RootState) => state.cases.messages);
   const caseDetail: any = useSelector((state: RootState) => state.cases.currentCase);
+  const isChatLoading: boolean = useSelector((state: RootState) => state.cases.isLoading);
 
   const dispatch = useDispatch();
 
@@ -47,6 +49,10 @@ export function CaseDetail() {
       dispatch({ type: "cases/leaveCaseRoom", payload: { caseId } });
     };
   }, []);
+
+  useEffect(() => {
+    scrollToBottom();
+  }, [messages]);
 
   useEffect(() => {
     if (caseDetail?.location) {
@@ -76,7 +82,7 @@ export function CaseDetail() {
         });
       },
       (error) => {
-        console.error(error);
+        toast.error(error.message);
       },
       { enableHighAccuracy: true },
     );
@@ -124,9 +130,17 @@ export function CaseDetail() {
     return mapbox;
   };
 
+  const scrollToBottom = () => {
+    const chatBox = document.getElementById("ai-chat-box");
+    chatBox?.scrollTo(0, chatBox.scrollHeight);
+  };
+
   const handleSendMessage = () => {
     const payload = { case: caseId, message: prompt, sender: me?._id, senderType: SenderType.user };
     dispatch({ type: "cases/sendMessage", payload });
+
+    setPrompt("");
+    scrollToBottom();
   };
 
   return (
@@ -177,7 +191,10 @@ export function CaseDetail() {
         <div className="col-span-1">
           {/* Chat Box */}
           <div className="min-h-96 my-10 col-span-3">
-            <div className="flex flex-col gap-4 w-full mx-auto border rounded-lg pt-4 h-[750px] overflow-auto ">
+            <div
+              id="ai-chat-box"
+              className="flex flex-col gap-4 w-full mx-auto border rounded-lg pt-4 h-[750px] overflow-auto "
+            >
               {messages?.length ? (
                 messages?.map((message: any) => {
                   return (
@@ -206,14 +223,26 @@ export function CaseDetail() {
                 </div>
               )}
 
-              <div className="sticky bottom-0 flex items-center gap-2 w-full bg-background p-4 border-t-2">
-                <Input
-                  placeholder="Type your message..."
-                  onChange={(event) => setPrompt(event.target.value)}
-                  className="flex-1 rounded-lg p-2 border border-input"
-                />
-                <Button onClick={handleSendMessage}>Send</Button>
-              </div>
+              {!isChatLoading ? (
+                <div className="sticky bottom-0 flex items-center gap-2 w-full bg-background p-4 border-t-2">
+                  <Input
+                    value={prompt}
+                    placeholder="Type your message..."
+                    onChange={(event) => setPrompt(event.target.value)}
+                    className="flex-1 rounded-lg p-2 border border-input"
+                  />
+                  <Button disabled={prompt ? false : true} onClick={handleSendMessage}>
+                    Send
+                  </Button>
+                </div>
+              ) : (
+                <div className="sticky bottom-0 flex items-center justify-center gap-2 w-full bg-background p-4 border-t-2">
+                  <div className="inset-0 flex items-center justify-center z-50">
+                    <div className="w-6 h-6 border-4 border-primary rounded-full animate-spin border-t-transparent" />
+                  </div>
+                  <div className="text-muted-foreground">Loading...</div>
+                </div>
+              )}
             </div>
           </div>
         </div>

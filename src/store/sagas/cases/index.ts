@@ -53,6 +53,16 @@ function* leaveCaseRoom(payload: any): Generator<any, void, any> {
   }
 }
 
+function* handleCaseError(): Generator<any, void, any> {
+  try {
+    caseSocketio.on("error", (data: any) => {
+      toast.error(data?.message);
+    });
+  } catch (error: any) {
+    toast.error(error?.response?.data?.message);
+  }
+}
+
 function* closeCaseConnection(): Generator<any, void, any> {
   try {
     caseSocketio.removeAllListeners();
@@ -98,6 +108,16 @@ function* receiveMessage(): Generator<any, void, any> {
   }
 }
 
+function* handleChatError(): Generator<any, void, any> {
+  try {
+    caseSocketio.on("error", (data: any) => {
+      toast.error(data?.message);
+    });
+  } catch (error: any) {
+    toast.error(error?.response?.data?.message);
+  }
+}
+
 function* closeChatConnection(payload: any): Generator<any, void, any> {
   try {
     aiChatSocketio.emit("leave-room", payload?.payload);
@@ -128,6 +148,10 @@ export function* leaveCaseRoomSaga(): Generator<any, void, any> {
   yield takeLatest("cases/leaveCaseRoom", leaveCaseRoom);
 }
 
+export function* handleCaseErrorSaga(): Generator<any, void, any> {
+  yield takeLatest("cases/handleCaseError", handleCaseError);
+}
+
 export function* closeCaseConnectionSaga(): Generator<any, void, any> {
   yield takeLatest("cases/closeCaseConnection", closeCaseConnection);
 }
@@ -147,6 +171,10 @@ export function* sendMessageSaga(): Generator<any, void, any> {
 
 export function* receiveMessageSaga(): Generator<any, void, any> {
   yield takeLatest("cases/receiveMessage", receiveMessage);
+}
+
+export function* handleChatErrorSaga(): Generator<any, void, any> {
+  yield takeLatest("cases/handleChatError", handleChatError);
 }
 
 export function* closeChatConnectionSaga(): Generator<any, void, any> {
