@@ -158,7 +158,8 @@ export function CaseDetail() {
                   <h1 className="text-xl my-5">Discovered location</h1>
                   <h1>
                     <span className="font-bold">Longitude: </span>
-                    {currentLocation?.lng}, <span className="font-bold">Latitude: </span> {currentLocation?.lat}
+                    {caseDetail?.location?.coordinates[0]}, <span className="font-bold">Latitude: </span>{" "}
+                    {caseDetail.location?.coordinates[1]}
                   </h1>
                 </>
               ) : (
