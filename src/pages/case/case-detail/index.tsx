@@ -16,6 +16,8 @@ import VideoPlayer from "@/components/modules/video-player";
 import { SenderType } from "@/enums/SenderType";
 import Markdown from "react-markdown";
 import toast from "react-hot-toast";
+import { Message } from "@/types/case";
+import { Send } from "lucide-react";
 
 export function CaseDetail() {
   const { caseId } = useParams();
@@ -196,17 +198,17 @@ export function CaseDetail() {
               className="flex flex-col gap-4 w-full mx-auto border rounded-lg pt-4 h-[750px] overflow-auto "
             >
               {messages?.length ? (
-                messages?.map((message: any) => {
+                messages?.map((message: Message | any) => {
                   return (
                     <div key={message?._id} className="flex pl-4 pr-4 items-start gap-4">
                       <Avatar className="w-8 h-8 border">
                         <AvatarImage src="/placeholder-user.jpg" alt="Image" />
-                        <AvatarFallback>YO</AvatarFallback>
+                        <AvatarFallback>{message?.senderType === SenderType.user ? "FR" : "AI"}</AvatarFallback>
                       </Avatar>
                       <div className="grid gap-1">
                         <div className="flex items-center gap-2 text-sm">
                           <div className="font-medium">{message?.sender?.name}</div>
-                          <div className="text-muted-foreground">{`${new Date(message?.updatedAt)}`}</div>
+                          <div className="text-muted-foreground">{`${new Date(message?.updatedAt ?? "")}`}</div>
                         </div>
                         <div className="bg-card border-solid border-2 border-primary-foreground rounded-2xl p-4 max-w-full">
                           <Markdown>{message?.message}</Markdown>
@@ -232,7 +234,9 @@ export function CaseDetail() {
                     className="flex-1 rounded-lg p-2 border border-input"
                   />
                   <Button disabled={prompt ? false : true} onClick={handleSendMessage}>
-                    Send
+                    <div className="flex items-center justify-between w-16">
+                      <Send /> Send
+                    </div>
                   </Button>
                 </div>
               ) : (

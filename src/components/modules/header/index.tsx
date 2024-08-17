@@ -106,7 +106,7 @@ export function Header({ me }: HeaderProps) {
                 <DropdownMenuTrigger>
                   <Avatar>
                     <AvatarImage src="https://github.com/shadcn.png" />
-                    <AvatarFallback>{getInitials(me?.firstname, me?.lastname)} </AvatarFallback>
+                    <AvatarFallback>{getInitials(me?.firstname ?? "", me?.lastname ?? "")} </AvatarFallback>
                   </Avatar>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent>
