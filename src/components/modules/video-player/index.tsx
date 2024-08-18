@@ -1,20 +1,35 @@
 import React, { useRef } from "react";
 
-interface VideoPlayerProps {
-  src: string;
-  poster?: string;
-  width?: string;
-  height?: string;
-}
+import { VideoPlayerProps } from "@/types/case";
 
-const VideoPlayer: React.FC<VideoPlayerProps> = ({ src, poster, width = "100%", height = "auto" }) => {
+const VideoPlayer: React.FC<VideoPlayerProps> = ({
+  src,
+  liveVideoURL,
+  width = "auto",
+  height = "auto",
+  isLive = false,
+}) => {
   const videoRef = useRef<HTMLVideoElement>(null);
-
   return (
     <div style={{ textAlign: "center" }}>
-      <video ref={videoRef} src={src} poster={poster} width={width} height={height} controls>
-        Your browser does not support the video tag.
-      </video>
+      {!isLive ? (
+        <video className={`h-[750px] max-w-full`} ref={videoRef} src={src} width={width} height={height} controls>
+          Your browser does not support the video tag.
+        </video>
+      ) : (
+        <div className="relative h-[750px] max-w-full mx-auto">
+          <img
+            src={liveVideoURL}
+            width={width}
+            height={height}
+            alt="Live Stream"
+            className="aspect-video object-cover rounded-lg"
+          />
+          <div className="absolute top-4 left-4 bg-red-500 shadow-2xl text-white font-bold px-3 py-1 rounded-md">
+            LIVE
+          </div>
+        </div>
+      )}
     </div>
   );
 };

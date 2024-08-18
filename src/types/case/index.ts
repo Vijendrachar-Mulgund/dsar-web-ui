@@ -25,6 +25,14 @@ export type Message = {
   __v?: 0;
 };
 
+export type VideoPlayerProps = {
+  src: string;
+  liveVideoURL?: string;
+  width?: string;
+  height?: string;
+  isLive?: boolean;
+};
+
 type Sender = {
   name?: string;
   id?: string;
