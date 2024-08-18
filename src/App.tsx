@@ -35,7 +35,7 @@ export function App() {
       <Header me={me} />
 
       {/* Routes */}
-      <div className="main-content">
+      <div className="main-content hide-scrollbar">
         <Outlet />
       </div>
 

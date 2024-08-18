@@ -190,12 +190,12 @@ export function CaseDetail() {
           </div>
         </div>
 
-        <div className="col-span-1">
+        <div className="grid grid-cols-4">
           {/* Chat Box */}
           <div className="min-h-96 my-10 col-span-3">
             <div
               id="ai-chat-box"
-              className="flex flex-col gap-4 w-full mx-auto border rounded-lg pt-4 h-[750px] overflow-auto "
+              className="flex flex-col gap-4 w-full mx-auto border rounded-lg pt-4 h-[750px] hide-scrollbar overflow-auto"
             >
               {messages?.length ? (
                 messages?.map((message: Message | any) => {
