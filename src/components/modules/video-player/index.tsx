@@ -13,7 +13,14 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
   return (
     <div style={{ textAlign: "center" }}>
       {!isLive ? (
-        <video className={`h-[750px] max-w-full`} ref={videoRef} src={src} width={width} height={height} controls>
+        <video
+          className="h-[750px] max-w-full rounded-lg"
+          ref={videoRef}
+          src={src}
+          width={width}
+          height={height}
+          controls
+        >
           Your browser does not support the video tag.
         </video>
       ) : (
@@ -23,7 +30,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
             width={width}
             height={height}
             alt="Live Stream"
-            className="aspect-video object-cover rounded-lg"
+            className="aspect-video object-cover rounded-lg h-[750px] max-w-full"
           />
           <div className="absolute top-4 left-4 bg-red-500 shadow-2xl text-white font-bold px-3 py-1 rounded-md">
             LIVE

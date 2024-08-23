@@ -24,7 +24,6 @@ export function CaseDetail() {
 
   const [prompt, setPrompt] = useState("");
   const [currentLocation, setCurrentLocation] = useState({ lat: 0, lng: 0 });
-  const [ipsLiveVideoURL, setIpsLiveVideoURL] = useState<string>("");
 
   const me: User | null = useSelector((state: RootState) => state.auth.me) as User | null;
   const messages: any = useSelector((state: RootState) => state.cases.messages);
@@ -35,9 +34,6 @@ export function CaseDetail() {
 
   useEffect(() => {
     const payload = { caseId: caseId, sender: me?._id };
-
-    // Get the live video URL
-    setIpsLiveVideoURL(import.meta.env.VITE_IPS_LIVE_URL as string);
 
     // Chat
     dispatch({ type: "cases/createChatConnection", payload });
@@ -156,7 +152,7 @@ export function CaseDetail() {
         <div className="text-muted-foreground text-center my-5">Case ID: {caseId}</div>
 
         {/* Video Player */}
-        <VideoPlayer src={caseDetail?.videoURL} isLive={caseDetail?.isLive} liveVideoURL={ipsLiveVideoURL} />
+        <VideoPlayer src={caseDetail?.videoURL} isLive={caseDetail?.isLive} liveVideoURL={caseDetail?.liveVideoURL} />
 
         <div className="grid grid-cols-4 gap-4 h-[750px] my-10">
           <div className="cols-span-1 flex items-center justify-center h-full">
