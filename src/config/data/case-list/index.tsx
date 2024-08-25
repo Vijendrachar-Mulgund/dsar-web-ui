@@ -76,7 +76,9 @@ export const columns: ColumnDef<Case>[] = [
     cell: ({ row }) => {
       return (
         <div className="flex space-x-2">
-          <span className="max-w-[500px] truncate font-medium">{`${new Date(row?.original?.updatedAt)}`}</span>
+          <span className="max-w-[500px] truncate font-medium">
+            {row?.original?.updatedAt ? `${new Date(row?.original?.updatedAt)}` : ""}
+          </span>
         </div>
       );
     },
