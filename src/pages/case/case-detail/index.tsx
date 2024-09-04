@@ -73,7 +73,7 @@ export function CaseDetail() {
     } else {
       initMapbox(currentLocation?.lng, currentLocation?.lat);
     }
-  }, [caseDetail?.location]);
+  }, [caseDetail?.location, currentLocation]);
 
   const getCurrentLocation = () => {
     navigator.geolocation.getCurrentPosition(
@@ -149,7 +149,15 @@ export function CaseDetail() {
     <div>
       <div className="w-11/12 m-auto">
         <h1 className="text-4xl text-center font-bold ">Case Detail</h1>
-        <div className="text-muted-foreground text-center my-5">Case ID: {caseId}</div>
+        <div className="text-muted-foreground text-center my-5">
+          <span className="font-bold text-primary">Case ID</span> {caseId}
+          <span className="mx-8"></span>
+          <span className="font-bold text-primary"> Number of People Found </span>
+          {caseDetail?.numberOfPeopleFound ? caseDetail?.numberOfPeopleFound : "None"}
+          <div className="my-6"></div>
+          <span className="font-bold text-primary">Case Description</span> {caseDetail?.description}
+          <div className="my-6"></div>
+        </div>
 
         {/* Video Player */}
         <VideoPlayer src={caseDetail?.videoURL} isLive={caseDetail?.isLive} liveVideoURL={caseDetail?.liveVideoURL} />
@@ -157,7 +165,7 @@ export function CaseDetail() {
         <div className="grid grid-cols-4 gap-4 h-[750px] my-10">
           <div className="cols-span-1 flex items-center justify-center h-full">
             <div className="flex flex-col items-center justify-center">
-              <h1 className="text-2xl">Location Information</h1>
+              <h1 className="text-3xl">Location Information</h1>
 
               <h1 className="text-xl my-5">Your current location</h1>
               <h1>
