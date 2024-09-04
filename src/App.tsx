@@ -27,6 +27,10 @@ export function App() {
     if (me?.role == Role.teamLeader || Role.teamMember) {
       navigate("/case/list");
     }
+
+    if (!me) {
+      navigate("/login");
+    }
   }, [me]);
 
   return (
