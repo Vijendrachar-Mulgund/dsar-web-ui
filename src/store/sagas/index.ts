@@ -4,6 +4,7 @@ import * as userSagas from "./user";
 import * as authSagas from "./auth";
 import * as casesSagas from "./cases";
 import * as artificialIntelligenceSagas from "./artificialIntelligence";
+import * as drones from "./drones";
 
 export default function* rootSaga() {
   yield all(
@@ -12,6 +13,7 @@ export default function* rootSaga() {
       ...Object.values(authSagas),
       ...Object.values(casesSagas),
       ...Object.values(artificialIntelligenceSagas),
+      ...Object.values(drones),
     ].map(fork),
   );
 }

@@ -155,7 +155,8 @@ export function CaseDetail() {
           <span className="font-bold text-primary"> Number of People Found </span>
           {caseDetail?.numberOfPeopleFound ? caseDetail?.numberOfPeopleFound : "None"}
           <div className="my-6"></div>
-          <span className="font-bold text-primary">Case Description</span> {caseDetail?.description}
+          <span className="font-bold text-primary">Case Description</span>
+          <br /> {caseDetail?.description}
           <div className="my-6"></div>
         </div>
 
